@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tsuné</title>
+<meta name="description" content="Les 11 premières pages">
+<meta property="og:title" content="Tsuné">
+<meta property="og:description" content="Les 11 premières pages">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://florianzilliox.github.io/tsune/">
+<meta property="og:image" content="https://florianzilliox.github.io/tsune/pages/p1.png">
+<link rel="icon" href="data:,">
+<style>
+:root{--fond:#161514;--panneau:rgba(22,21,20,.94);--texte:#efece6;--doux:#a9a59d;--trait:rgba(255,255,255,.16);--vif:#fff;--cote:92px;--barre:calc(48px + env(safe-area-inset-bottom))}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--fond);overflow:hidden;overscroll-behavior:none}
+body{display:flex;align-items:center;justify-content:center;touch-action:none;user-select:none;-webkit-user-select:none;font:15px/1.3 system-ui,sans-serif;color:var(--texte)}
+#livre{position:relative;perspective:2600px;flex:none}
+#livre img{position:absolute;top:0;display:block;background:#fff;-webkit-user-drag:none}
+#ombre{position:absolute;top:0;bottom:0;left:50%;width:7%;transform:translateX(-50%);pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(0,0,0,.09) 46%,rgba(0,0,0,.16) 50%,rgba(0,0,0,.09) 54%,transparent)}
+#feuille{position:absolute;top:0;display:none;transform-style:preserve-3d;z-index:2}
+#feuille img{top:0;left:0;width:100%;height:100%;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+#feuille img+img{transform:rotateY(180deg)}
+#g{cursor:w-resize}#d{cursor:e-resize}
+#panneau{position:fixed;left:0;right:0;bottom:0;z-index:4;background:var(--panneau);border-top:1px solid var(--trait);padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  transform:translateY(102%);transition:transform .22s ease;touch-action:pan-x}
+#panneau.ouvert{transform:none}
+#haut{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+#haut button,#vignettes button{font:inherit;color:inherit;background:none;border:1px solid var(--trait);border-radius:7px;cursor:pointer}
+#haut .v{padding:6px 12px;min-height:36px}
+#haut .v[aria-pressed=true]{background:var(--vif);color:#111;border-color:var(--vif)}
+#note{color:var(--doux);margin-right:auto;padding-left:6px}
+#haut .o{width:36px;height:36px;padding:0;font-size:18px}
+#vignettes{display:flex;flex-direction:row-reverse;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin}
+#vignettes button{flex:none;padding:3px;width:76px;color:var(--doux);font-size:12px}
+#vignettes button[aria-current=true]{border-color:var(--vif);color:var(--vif)}
+#vignettes img{display:block;width:100%;aspect-ratio:var(--ratio);object-fit:cover;background:#fff;margin-bottom:3px;pointer-events:none}
+button:focus-visible{outline:2px solid var(--vif);outline-offset:2px}
+#barre,.fleche,#accueil,#fin{display:none}
+.public body{padding-bottom:var(--barre)}
+.public #barre{display:flex;position:fixed;left:0;right:0;bottom:0;height:var(--barre);padding:0 12px env(safe-area-inset-bottom);z-index:3;align-items:center;gap:8px;background:var(--fond);border-top:1px solid var(--trait)}
+#barre button{font:inherit;color:inherit;background:none;border:1px solid var(--trait);border-radius:7px;min-height:34px;padding:0 12px;cursor:pointer}
+#barre button:hover{border-color:var(--doux)}
+#repere{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:13px;color:var(--doux)}
+#prog{display:flex;justify-content:flex-end;width:min(240px,100%);height:3px;background:var(--trait);border-radius:2px;overflow:hidden}
+#prog i{display:block;height:100%;background:var(--vif);width:0}
+.fleche{position:fixed;top:0;bottom:var(--barre);width:var(--cote);z-index:3;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:0 6px;background:none;border:0;color:var(--texte);font:inherit;cursor:pointer}
+.fleche:hover{background:rgba(255,255,255,.06)}
+.fleche[disabled]{opacity:.25;cursor:default;background:none}
+.chev{font-size:46px;line-height:1}
+.lab{font-size:13px;line-height:1.25;color:var(--doux);text-align:center}
+#bt-suiv{left:0}#bt-prec{right:0}
+@media (hover:hover) and (pointer:fine){.public .fleche{display:flex}}
+.public #accueil.ouvert,.public #fin.ouvert{display:flex}
+#accueil,#fin{position:fixed;inset:0;z-index:6;background:var(--fond);padding:16px;overflow:auto;touch-action:pan-y;user-select:text;-webkit-user-select:text}
+.carte{margin:auto;width:100%;max-width:520px;font-size:16px;line-height:1.45}
+.carte h1,.carte h2{margin:0;font-size:34px;line-height:1.1;letter-spacing:.01em}
+.carte .sous{margin:6px 0 22px;color:var(--doux)}
+.sens{display:flex;gap:18px;align-items:center;margin-bottom:18px}
+.sens svg{flex:none;width:96px;height:auto;border-radius:3px}
+.sens p{margin:0}
+.carte ul{list-style:none;margin:0 0 24px;padding:14px 0 0;border-top:1px solid var(--trait);color:var(--doux)}
+.carte li{margin-bottom:8px}
+kbd{display:inline-block;min-width:26px;padding:1px 6px;border:1px solid var(--trait);border-radius:5px;text-align:center;color:var(--texte);font:inherit}
+.carte button{font:inherit;min-height:46px;padding:0 20px;border-radius:7px;border:1px solid var(--vif);background:var(--vif);color:#111;font-weight:600;cursor:pointer;margin:0 8px 8px 0}
+.carte button+button{background:none;color:var(--texte);border-color:var(--trait);font-weight:400}
+.tactile{display:none}
+@media (hover:none),(pointer:coarse){.tactile{display:block}.souris{display:none}}
+@media (max-width:420px){.sens svg{width:78px}.carte h1,.carte h2{font-size:30px}}
+</style></head>
+<body>
+<div id="livre"><img id="g" alt=""><img id="d" alt=""><div id="ombre"></div><div id="feuille"><img alt=""><img alt=""></div></div>
+<button class="fleche" id="bt-suiv" aria-label="Page suivante"><span class="chev" aria-hidden="true">‹</span><span class="lab">Page suivante</span></button>
+<button class="fleche" id="bt-prec" aria-label="Page précédente"><span class="chev" aria-hidden="true">›</span><span class="lab">Page précédente</span></button>
+<div id="barre"><button id="bt-aide">Aide</button><div id="repere"><span id="ou" aria-live="polite"></span><div id="prog"><i></i></div></div><button id="bt-pages">Pages</button><button id="bt-plein" aria-label="Plein écran">⛶</button></div>
+<div id="panneau" aria-hidden="true"><div id="haut"><span id="note"></span><button class="o" id="plein" aria-label="Plein écran">⛶</button></div><div id="vignettes"></div></div>
+<div id="accueil" role="dialog" aria-modal="true" aria-labelledby="ac-titre"><div class="carte">
+<h1 id="ac-titre"></h1><p class="sous" id="ac-sous"></p>
+<div class="sens"><svg viewBox="0 0 96 136" role="img" aria-label="Une page : la case 1 en haut à droite, la case 2 à sa gauche, la case 3 en dessous"><rect width="96" height="136" fill="#fff"/><g fill="none" stroke="#111" stroke-width="2"><rect x="50" y="8" width="38" height="56"/><rect x="8" y="8" width="38" height="56"/><rect x="8" y="70" width="80" height="58"/></g><g fill="#111" font-family="system-ui,sans-serif" font-size="22" font-weight="700" text-anchor="middle"><text x="69" y="44">1</text><text x="27" y="44">2</text><text x="48" y="107">3</text></g></svg>
+<p><strong>Ce manga se lit de droite à gauche.</strong> On commence en haut à droite de la page, puis on suit les cases vers la gauche. Les pages se tournent dans le même sens.</p></div>
+<ul class="souris"><li><kbd>←</kbd> ou le bouton de gauche : page suivante</li><li><kbd>→</kbd> ou le bouton de droite : page précédente</li><li><kbd>F</kbd> : plein écran</li></ul>
+<ul class="tactile"><li>Touchez le bord gauche, ou glissez vers la droite : page suivante</li><li>Touchez le bord droit : page précédente</li><li>À l'horizontale, les pages s'affichent en double</li></ul>
+<button id="ac-go">Commencer la lecture</button>
+</div></div>
+<div id="fin" role="dialog" aria-modal="true" aria-labelledby="fin-titre"><div class="carte">
+<h2 id="fin-titre">Fin de cet extrait</h2><p class="sous" id="fin-note"></p>
+<button id="fin-debut">Relire depuis le début</button><button id="fin-retour">Revenir à la dernière page</button>
+</div></div>
+<script src="versions.js"></script>
+<script>
+const {versions:VERSIONS,ratio:RATIO}=window.LISEUSE, DUREE=420, PUB=!!window.LISEUSE.public;
+document.documentElement.classList.toggle('public',PUB);
+const $=i=>document.getElementById(i), livre=$('livre'), g=$('g'), d=$('d'), feuille=$('feuille'), ombre=$('ombre'), panneau=$('panneau'), accueil=$('accueil'), fin=$('fin');
+const couvert=()=>accueil.classList.contains('ouvert')||fin.classList.contains('ouvert');
+function montrer(el,o){el.classList.toggle('ouvert',o);if(o){el.scrollTop=0;el.querySelector('button').focus({preventScroll:true})}}
+const [recto,verso]=feuille.querySelectorAll('img');
+document.documentElement.style.setProperty('--ratio',RATIO);
+const lire=k=>{try{return localStorage.getItem(k)}catch(e){return null}}, ecrire=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+let double=null, vues=[], i=0, occupe=false, version=null, chemin={};
+const estDouble=()=>double===null?innerWidth/innerHeight>1.05:double;
+function construire(){
+  const nums=version.pages.map(p=>p.n); vues=[]; chemin=Object.fromEntries(version.pages.map(p=>[p.n,p.src]));
+  for(let k=0;k<nums.length;k++){
+    const n=nums[k];
+    if(estDouble()&&n%2===0&&nums[k+1]===n+1){vues.push({d:n,g:n+1});k++}
+    else vues.push({seule:n});
+  }
+}
+const indice=n=>{
+  let v=vues.findIndex(x=>x.seule===n||x.d===n||x.g===n);
+  if(v<0){v=vues.findIndex(x=>(x.seule??x.d)>=n);if(v<0)v=vues.length-1}
+  return v};
+const premiere=v=>v.seule??v.d;
+function cadrer(){
+  const souris=PUB&&matchMedia('(hover:hover) and (pointer:fine)').matches;
+  const large=vues[i]&&!vues[i].seule, l0=innerWidth-(souris?2*parseFloat(getComputedStyle($('bt-suiv')).width):0), h0=innerHeight-(PUB?$('barre').offsetHeight:0);
+  const h=Math.min(h0,l0/((large?2:1)*RATIO)), w=h*RATIO;
+  livre.style.width=(large?2*w:w)+'px'; livre.style.height=h+'px';
+  for(const [im,x] of [[g,0],[d,large?w:0]]){im.style.left=x+'px';im.style.width=w+'px';im.style.height=h+'px'}
+  feuille.style.width=w+'px';feuille.style.height=h+'px';
+  ombre.style.display=large?'block':'none';
+}
+function poser(){
+  const v=vues[i];
+  if(v.seule){g.style.display='none';d.style.display='block';d.src=chemin[v.seule];d.alt='Page '+v.seule}
+  else{g.style.display='block';d.style.display='block';g.src=chemin[v.g];d.src=chemin[v.d];g.alt='Page '+v.g;d.alt='Page '+v.d}
+  cadrer();
+  history.replaceState(null,'','#'+encodeURIComponent(version.nom)+'/'+premiere(v));
+  ecrire('liseuse-page',premiere(v)); ecrire('liseuse-version',version.nom);
+  marquer();
+}
+function tourner(sens){
+  const j=i+sens; if(occupe||j<0) return;
+  if(j>=vues.length){if(PUB)montrer(fin,true);return}
+  const a=vues[i], b=vues[j], calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(calme||a.seule||b.seule){i=j;poser();return}
+  occupe=true;
+  const w=parseFloat(g.style.width);
+  recto.src=chemin[sens>0?a.g:a.d]; verso.src=chemin[sens>0?b.d:b.g];
+  if(sens>0){g.src=chemin[b.g]}else{d.src=chemin[b.d]}
+  Object.assign(feuille.style,{display:'block',left:(sens>0?0:w)+'px',transformOrigin:sens>0?'right center':'left center',transition:'none',transform:'rotateY(0deg)'});
+  feuille.getBoundingClientRect();
+  feuille.style.transition=`transform ${DUREE}ms cubic-bezier(.42,.02,.3,1)`;
+  feuille.style.transform=`rotateY(${sens>0?180:-180}deg)`;
+  setTimeout(()=>{i=j;poser();feuille.style.display='none';occupe=false},DUREE+20);
+}
+const suivante=()=>tourner(1), precedente=()=>tourner(-1);
+function aller(n){if(occupe)return;i=indice(n);poser()}
+function choisir(v){
+  const n=vues.length?premiere(vues[i]):null; version=v; construire(); i=n===null?0:indice(n); dessinerPanneau(); poser();
+  version.pages.forEach(p=>{const im=new Image();im.src=p.src});
+}
+function refaire(){const n=premiere(vues[i]);construire();i=indice(n);dessinerPanneau();poser()}
+function dessinerPanneau(){
+  const h=$('haut'); h.querySelectorAll('.v').forEach(x=>x.remove());
+  if(VERSIONS.length>1)VERSIONS.forEach(v=>{const b=document.createElement('button');b.className='v';b.textContent=v.nom;b.setAttribute('aria-pressed',v===version);b.onclick=()=>choisir(v);h.insertBefore(b,$('note'))});
+  $('note').textContent=version.note||'';
+  const t=$('vignettes'); t.textContent='';
+  version.pages.forEach(p=>{const b=document.createElement('button');b.dataset.n=p.n;b.setAttribute('aria-label','Page '+p.n);
+    const im=document.createElement('img');im.src=p.src;im.alt='';im.loading='lazy';b.append(im,String(p.n));b.onclick=()=>aller(p.n);t.append(b)});
+}
+function marquer(){
+  const v=vues[i];
+  document.querySelectorAll('#vignettes button').forEach(b=>{const n=+b.dataset.n,ici=n===v.seule||n===v.d||n===v.g;b.setAttribute('aria-current',ici);
+    if(ici&&panneau.classList.contains('ouvert'))b.scrollIntoView({inline:'center',block:'nearest'})});
+  if(PUB){
+    const nb=version.pages.length, de=v.seule?String(v.seule):v.d+'-'+v.g;
+    $('ou').textContent=`Page${v.seule?'':'s'} ${de} sur ${nb}`;
+    $('prog').firstElementChild.style.width=(i+1)/vues.length*100+'%';
+    $('bt-prec').disabled=i===0;
+  }
+}
+function basculer(o){const ouvert=o??!panneau.classList.contains('ouvert');panneau.classList.toggle('ouvert',ouvert);panneau.setAttribute('aria-hidden',!ouvert);if(ouvert)marquer()}
+function plein(){document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen?.()}
+$('plein').onclick=plein;
+addEventListener('resize',refaire);
+addEventListener('keydown',e=>{
+  if(couvert()){if(e.key==='Escape'){fin.classList.contains('ouvert')?montrer(fin,false):fermerAccueil()}return}
+  if(PUB&&(e.key==='?'||e.key==='h'||e.key==='H')){ouvrirAide();return}
+  if(['ArrowLeft',' ','PageDown','ArrowDown','Enter'].includes(e.key)){if(e.target.tagName==='BUTTON'&&(e.key===' '||e.key==='Enter'))return;e.preventDefault();suivante()}
+  else if(['ArrowRight','PageUp','ArrowUp','Backspace'].includes(e.key)){e.preventDefault();precedente()}
+  else if(e.key==='Home')aller(version.pages[0].n); else if(e.key==='End')aller(version.pages.at(-1).n);
+  else if('fF'.includes(e.key))plein();
+  else if('dD'.includes(e.key)){double=!estDouble();refaire()}
+  else if('mM'.includes(e.key))basculer();
+  else if('vV'.includes(e.key)&&VERSIONS.length>1)choisir(VERSIONS[(VERSIONS.indexOf(version)+1)%VERSIONS.length]);
+  else if(e.key==='Escape')basculer(false);
+});
+function fermerAccueil(){montrer(accueil,false);ecrire('liseuse-accueil','1')}
+function ouvrirAide(){$('ac-go').textContent='Reprendre la lecture';montrer(accueil,true)}
+$('bt-suiv').onclick=e=>{e.currentTarget.blur();suivante()}; $('bt-prec').onclick=e=>{e.currentTarget.blur();precedente()};
+$('bt-aide').onclick=ouvrirAide; $('bt-pages').onclick=()=>basculer(); $('bt-plein').onclick=plein;
+if(!document.documentElement.requestFullscreen)$('bt-plein').style.display='none';
+$('ac-go').onclick=fermerAccueil;
+$('fin-debut').onclick=()=>{montrer(fin,false);aller(version.pages[0].n)};
+$('fin-retour').onclick=()=>montrer(fin,false);
+let depart=null;
+addEventListener('pointerdown',e=>{depart=panneau.contains(e.target)||e.target.closest('button,#barre,#accueil,#fin')?null:[e.clientX,e.clientY]});
+addEventListener('pointerup',e=>{
+  if(!depart)return; const dx=e.clientX-depart[0], dy=e.clientY-depart[1]; depart=null;
+  if(panneau.classList.contains('ouvert')){basculer(false);return}
+  if(Math.abs(dy)>60&&Math.abs(dy)>Math.abs(dx)){if(dy<0)basculer(true);return}
+  if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){dx>0?suivante():precedente();return}
+  if(Math.abs(dx)<10&&Math.abs(dy)<10){const x=e.clientX/innerWidth;x<.4?suivante():x>.6?precedente():basculer()}
+});
+let molette=0;
+addEventListener('wheel',e=>{if(couvert()||panneau.contains(e.target))return;const t=Date.now();if(t-molette<500||Math.abs(e.deltaY)<20)return;molette=t;e.deltaY>0?suivante():precedente()},{passive:true});
+const [hv,hp]=decodeURIComponent(location.hash.slice(1)).split('/');
+version=VERSIONS.find(v=>v.nom===hv)||VERSIONS.find(v=>v.nom===lire('liseuse-version'))||VERSIONS.at(-1);
+construire();
+i=indice(parseInt(hp)||parseInt(lire('liseuse-page'))||version.pages[0].n);
+dessinerPanneau();poser();
+version.pages.forEach(p=>{const im=new Image();im.src=p.src});
+if(PUB){
+  $('ac-titre').textContent=window.LISEUSE.titre; $('ac-sous').textContent=window.LISEUSE.sous_titre||'';
+  $('fin-note').textContent=`Pages ${version.pages[0].n} à ${version.pages.at(-1).n}`;
+  if(!lire('liseuse-accueil'))montrer(accueil,true);
+}
+</script></body></html>
