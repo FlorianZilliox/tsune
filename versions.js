@@ -1,6 +1,6 @@
 window.LISEUSE = {
  "titre": "Tsuné",
- "sous_titre": "Les 11 premières pages",
+ "sous_titre": "Les 14 premières pages",
  "ratio": 0.63876,
  "public": true,
  "versions": [
@@ -51,6 +51,18 @@ window.LISEUSE = {
     {
      "n": 11,
      "src": "pages/p11.png"
+    },
+    {
+     "n": 12,
+     "src": "pages/p12.png"
+    },
+    {
+     "n": 13,
+     "src": "pages/p13.png"
+    },
+    {
+     "n": 14,
+     "src": "pages/p14.png"
     }
    ]
   }
