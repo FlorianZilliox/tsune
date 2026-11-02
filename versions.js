@@ -9,6 +9,14 @@ window.LISEUSE = {
    "note": "",
    "pages": [
     {
+     "n": -1,
+     "src": "pages/p-1.png"
+    },
+    {
+     "n": 0,
+     "src": "pages/p0.png"
+    },
+    {
      "n": 1,
      "src": "pages/p1.png"
     },

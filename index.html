@@ -7,7 +7,7 @@
 <meta property="og:description" content="Les 14 premières pages">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://florianzilliox.github.io/tsune/">
-<meta property="og:image" content="https://florianzilliox.github.io/tsune/pages/p1.png">
+<meta property="og:image" content="https://florianzilliox.github.io/tsune/pages/p-1.png">
 <link rel="icon" href="data:,">
 <style>
 :root{--fond:#161514;--panneau:rgba(22,21,20,.94);--texte:#efece6;--doux:#a9a59d;--trait:rgba(255,255,255,.16);--vif:#fff;--cote:92px;--barre:calc(48px + env(safe-area-inset-bottom))}
@@ -111,9 +111,10 @@ const indice=n=>{
   if(v<0){v=vues.findIndex(x=>(x.seule??x.d)>=n);if(v<0)v=vues.length-1}
   return v};
 const premiere=v=>v.seule??v.d;
+const nom=n=>n<0?'Couverture':n===0?'Page blanche':'Page '+n, recit=()=>version.pages.filter(p=>p.n>0);
 function cadrer(){
   const souris=PUB&&matchMedia('(hover:hover) and (pointer:fine)').matches;
-  const large=vues[i]&&!vues[i].seule, l0=innerWidth-(souris?2*parseFloat(getComputedStyle($('bt-suiv')).width):0), h0=innerHeight-(PUB?$('barre').offsetHeight:0);
+  const large=vues[i]&&vues[i].seule===undefined, l0=innerWidth-(souris?2*parseFloat(getComputedStyle($('bt-suiv')).width):0), h0=innerHeight-(PUB?$('barre').offsetHeight:0);
   const h=Math.min(h0,l0/((large?2:1)*RATIO)), w=h*RATIO;
   livre.style.width=(large?2*w:w)+'px'; livre.style.height=h+'px';
   for(const [im,x] of [[g,0],[d,large?w:0]]){im.style.left=x+'px';im.style.width=w+'px';im.style.height=h+'px'}
@@ -122,7 +123,7 @@ function cadrer(){
 }
 function poser(){
   const v=vues[i];
-  if(v.seule){g.style.display='none';d.style.display='block';d.src=chemin[v.seule];d.alt='Page '+v.seule}
+  if(v.seule!==undefined){g.style.display='none';d.style.display='block';d.src=chemin[v.seule];d.alt=nom(v.seule)}
   else{g.style.display='block';d.style.display='block';g.src=chemin[v.g];d.src=chemin[v.d];g.alt='Page '+v.g;d.alt='Page '+v.d}
   cadrer();
   history.replaceState(null,'','#'+encodeURIComponent(version.nom)+'/'+premiere(v));
@@ -133,7 +134,7 @@ function tourner(sens){
   const j=i+sens; if(occupe||j<0) return;
   if(j>=vues.length){if(PUB)montrer(fin,true);return}
   const a=vues[i], b=vues[j], calme=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if(calme||a.seule||b.seule){i=j;poser();return}
+  if(calme||a.seule!==undefined||b.seule!==undefined){i=j;poser();return}
   occupe=true;
   const w=parseFloat(g.style.width);
   recto.src=chemin[sens>0?a.g:a.d]; verso.src=chemin[sens>0?b.d:b.g];
@@ -156,16 +157,16 @@ function dessinerPanneau(){
   if(VERSIONS.length>1)VERSIONS.forEach(v=>{const b=document.createElement('button');b.className='v';b.textContent=v.nom;b.setAttribute('aria-pressed',v===version);b.onclick=()=>choisir(v);h.insertBefore(b,$('note'))});
   $('note').textContent=version.note||'';
   const t=$('vignettes'); t.textContent='';
-  version.pages.forEach(p=>{const b=document.createElement('button');b.dataset.n=p.n;b.setAttribute('aria-label','Page '+p.n);
-    const im=document.createElement('img');im.src=p.src;im.alt='';im.loading='lazy';b.append(im,String(p.n));b.onclick=()=>aller(p.n);t.append(b)});
+  version.pages.forEach(p=>{const b=document.createElement('button');b.dataset.n=p.n;b.setAttribute('aria-label',nom(p.n));
+    const im=document.createElement('img');im.src=p.src;im.alt='';im.loading='lazy';b.append(im,p.n>0?String(p.n):p.n<0?'Couv.':'');b.onclick=()=>aller(p.n);t.append(b)});
 }
 function marquer(){
   const v=vues[i];
   document.querySelectorAll('#vignettes button').forEach(b=>{const n=+b.dataset.n,ici=n===v.seule||n===v.d||n===v.g;b.setAttribute('aria-current',ici);
     if(ici&&panneau.classList.contains('ouvert'))b.scrollIntoView({inline:'center',block:'nearest'})});
   if(PUB){
-    const nb=version.pages.length, de=v.seule?String(v.seule):v.d+'-'+v.g;
-    $('ou').textContent=`Page${v.seule?'':'s'} ${de} sur ${nb}`;
+    const nb=recit().length, seule=v.seule!==undefined, de=seule?String(v.seule):v.d===0?'1':v.d+'-'+v.g;
+    $('ou').textContent=seule&&v.seule<=0?nom(v.seule):`Page${seule||v.d===0?'':'s'} ${de} sur ${nb}`;
     $('prog').firstElementChild.style.width=(i+1)/vues.length*100+'%';
     $('bt-prec').disabled=i===0;
   }
@@ -213,7 +214,7 @@ dessinerPanneau();poser();
 version.pages.forEach(p=>{const im=new Image();im.src=p.src});
 if(PUB){
   $('ac-titre').textContent=window.LISEUSE.titre; $('ac-sous').textContent=window.LISEUSE.sous_titre||'';
-  $('fin-note').textContent=`Pages ${version.pages[0].n} à ${version.pages.at(-1).n}`;
+  $('fin-note').textContent=`Pages ${recit()[0].n} à ${version.pages.at(-1).n}`;
   if(!lire('liseuse-accueil'))montrer(accueil,true);
 }
 </script></body></html>
